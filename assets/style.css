@@ -1,0 +1,545 @@
+/* Mass Effect Universe · a fan site
+   Layout: one calm reading column, a slim top bar, and a "platform log" strip in mono
+   where the (fictional) geth caretaker leaves its notes. Kevin's words are in the serif. */
+
+:root {
+  --bg: #f3f5f7;
+  --surface: #ffffff;
+  --fg: #16202b;
+  --muted: #5a6876;
+  --line: #d6dde4;
+  --accent: #0b6f86;      /* cool cyan-teal: the caretaker's light */
+  --accent-soft: #e2f1f4;
+  --warm: #b4532a;        /* the human fan's colour, used sparingly */
+  --log-bg: #0f1a24;
+  --log-fg: #9fe3f0;
+
+  --font-display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.3rem;
+  --step-2: 1.7rem;
+  --step-3: 2.4rem;
+  --step-4: clamp(2.4rem, 6vw, 3.6rem);
+
+  --measure: 40rem;
+  --wide: 64rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1219;
+    --surface: #111b25;
+    --fg: #e4ebf1;
+    --muted: #94a5b5;
+    --line: #223241;
+    --accent: #5fd0e6;
+    --accent-soft: #12303a;
+    --warm: #f0915f;
+    --log-bg: #060c12;
+    --log-fg: #8fdcec;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1219;
+  --surface: #111b25;
+  --fg: #e4ebf1;
+  --muted: #94a5b5;
+  --line: #223241;
+  --accent: #5fd0e6;
+  --accent-soft: #12303a;
+  --warm: #f0915f;
+  --log-bg: #060c12;
+  --log-fg: #8fdcec;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+img { max-width: 100%; height: auto; }
+
+a { color: var(--accent); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+.skip { position: absolute; left: -999px; top: 0; }
+.skip:focus { left: 16px; top: 8px; background: var(--surface); padding: 6px 10px; z-index: 20; }
+
+.wrap {
+  max-width: var(--wide);
+  margin-inline: auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Header ---------- */
+.site-header { border-bottom: 1px solid var(--line); background: var(--surface); }
+.site-header .wrap {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 12px 24px; padding-block: 14px;
+}
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--fg); }
+.brand-eye {
+  width: 26px; height: 26px; border-radius: 50%; flex: none;
+  background: radial-gradient(circle at 50% 50%, var(--accent) 0 28%, transparent 30%),
+              radial-gradient(circle at 50% 50%, var(--accent-soft) 0 62%, transparent 64%);
+  box-shadow: 0 0 0 1px var(--line);
+}
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-name { font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; letter-spacing: 0.01em; }
+.brand-tag {
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+
+.nav { display: flex; flex-wrap: wrap; gap: 4px 18px; font-family: var(--font-display); font-size: 0.98rem; }
+.nav a { color: var(--muted); text-decoration: none; padding-block: 4px; border-bottom: 2px solid transparent; }
+.nav a:hover { color: var(--fg); }
+.nav a[aria-current="page"] { color: var(--fg); border-bottom-color: var(--accent); }
+
+/* ---------- Main ---------- */
+.prose { max-width: var(--measure); }
+.prose > * + * { margin-top: 1em; }
+
+h1, h2, h3 {
+  font-family: var(--font-display); font-weight: 600; line-height: 1.15;
+  text-wrap: balance; margin: 0; letter-spacing: -0.005em;
+}
+h1 { font-size: var(--step-4); }
+h2 { font-size: var(--step-2); margin-top: 2.2em; }
+h3 { font-size: var(--step-1); margin-top: 1.6em; }
+p { margin: 0; }
+.prose ul, .prose ol { padding-left: 1.25em; margin-block: 0; }
+.prose li + li { margin-top: 0.4em; }
+
+.eyebrow {
+  font-family: var(--font-mono); font-size: 0.78rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--accent); margin: 0 0 12px;
+}
+.lede { font-size: var(--step-1); line-height: 1.5; color: var(--fg); max-width: 36rem; }
+.muted { color: var(--muted); }
+
+/* Not-the-game notice */
+.notice {
+  border: 1px solid var(--line); border-left: 3px solid var(--warm);
+  background: var(--surface); padding: 14px 18px; font-size: var(--step--1); line-height: 1.55;
+  max-width: var(--measure);
+}
+.notice strong { font-family: var(--font-display); }
+
+/* The caretaker's log lines */
+.log {
+  font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.6;
+  background: var(--log-bg); color: var(--log-fg);
+  padding: 12px 16px; border-radius: 4px; max-width: var(--measure);
+  overflow-x: auto;
+}
+.log p + p { margin-top: 2px; }
+.log .k { opacity: 0.6; }
+
+/* Home hero */
+.hero { display: grid; gap: 22px; }
+
+.grid {
+  display: grid; gap: 20px; margin-top: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+}
+.panel {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+  padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0;
+}
+.panel h2, .panel h3 { margin-top: 0; font-size: var(--step-1); }
+.panel .eyebrow { margin: 0; }
+.panel p { font-size: 1rem; }
+.panel .more { margin-top: auto; font-family: var(--font-display); font-size: 0.95rem; }
+
+/* Countdown */
+.countdown { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: baseline; }
+.countdown .num {
+  font-family: var(--font-display); font-size: var(--step-3); font-weight: 600;
+  font-variant-numeric: tabular-nums; color: var(--accent); line-height: 1;
+}
+.countdown .unit { font-family: var(--font-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+/* Placeholder for articles still being written */
+.placeholder {
+  border: 1px dashed var(--line); border-radius: 6px; padding: 18px 20px;
+  background: transparent; max-width: var(--measure);
+}
+.placeholder .eyebrow { color: var(--warm); }
+.placeholder h3 { margin-top: 0; }
+
+/* Timeline */
+.timeline { list-style: none; padding: 0; margin: 32px 0 0; max-width: 46rem; }
+.timeline li {
+  display: grid; grid-template-columns: 7.5rem 1fr; gap: 6px 22px;
+  padding-block: 16px; border-top: 1px solid var(--line);
+}
+.timeline .when {
+  font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent);
+  font-variant-numeric: tabular-nums; padding-top: 3px;
+}
+.timeline .what { min-width: 0; }
+.timeline .what strong { font-family: var(--font-display); font-weight: 600; }
+.timeline sup a { text-decoration: none; font-family: var(--font-mono); font-size: 0.7rem; }
+@media (max-width: 520px) {
+  .timeline li { grid-template-columns: 1fr; }
+}
+
+.sources { font-size: var(--step--1); color: var(--muted); max-width: var(--measure); }
+.sources ol { padding-left: 1.6em; }
+.sources li + li { margin-top: 0.35em; }
+.sources a { word-break: break-word; }
+
+/* Order list on Start here */
+.steps { counter-reset: s; list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 14px; max-width: var(--measure); }
+.steps li {
+  counter-increment: s; display: grid; grid-template-columns: 2.6rem 1fr; gap: 14px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px;
+}
+.steps li::before {
+  content: counter(s); font-family: var(--font-display); font-size: var(--step-2);
+  font-weight: 600; color: var(--accent); line-height: 1;
+}
+.steps li > div { min-width: 0; }
+.steps h3 { margin-top: 0; font-size: var(--step-1); }
+.steps p { font-size: 1rem; margin-top: 4px; }
+
+/* ---------- Footer ---------- */
+.site-footer { border-top: 1px solid var(--line); background: var(--surface); }
+.site-footer .wrap { padding-block: 28px 36px; display: grid; gap: 14px; }
+.disclaimer { font-family: var(--font-display); font-size: 0.98rem; font-weight: 500; }
+.footnote { font-size: var(--step--1); color: var(--muted); max-width: 46rem; }
+.footer-log { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.02em; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .brand-eye { animation: blink 7s infinite; }
+  @keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.15); } }
+}
+
+/* ================= Visual layer: space band, eye, star map, missions, ring ================= */
+:root {
+  --space: #060b12;
+  --space-2: #0d1a28;
+  --space-fg: #e6eef5;
+  --space-muted: #9fb2c4;
+  --glow: #6fe0f2;
+  --glow-warm: #ffb38a;
+}
+
+main { padding-block: 0 64px; }
+.main-body { padding-top: 40px; }
+
+.sky {
+  position: relative; overflow: hidden; isolation: isolate;
+  background:
+    radial-gradient(ellipse 60% 80% at 85% 20%, rgba(111, 224, 242, 0.14), transparent 60%),
+    radial-gradient(ellipse 50% 70% at 10% 100%, rgba(255, 179, 138, 0.08), transparent 60%),
+    linear-gradient(180deg, var(--space) 0%, var(--space-2) 100%);
+  color: var(--space-fg);
+  border-bottom: 1px solid var(--line);
+}
+.stars { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; }
+.sky-inner {
+  display: grid; gap: 28px; align-items: center;
+  padding-block: 56px 48px;
+}
+.sky-text { display: grid; gap: 18px; min-width: 0; }
+.sky .eyebrow { color: var(--glow); margin: 0; }
+.sky h1 { color: var(--space-fg); }
+.sky .lede { color: var(--space-muted); }
+.sky--home .sky-inner { padding-block: 72px 64px; }
+.sky--home h1 { max-width: 13ch; }
+@media (min-width: 820px) {
+  .sky--home .sky-inner { grid-template-columns: minmax(0, 1fr) 300px; }
+}
+
+/* The single glowing eye: our own drawing, a lens of light */
+.eye {
+  width: min(260px, 60vw); aspect-ratio: 1; max-width: 100%; justify-self: center;
+  border-radius: 50%; position: relative;
+  background:
+    radial-gradient(circle, rgba(111,224,242,0.0) 55%, rgba(111,224,242,0.18) 56%, rgba(111,224,242,0.0) 58%),
+    radial-gradient(circle, rgba(111,224,242,0.0) 70%, rgba(111,224,242,0.10) 71%, rgba(111,224,242,0.0) 73%),
+    radial-gradient(circle, #0f2231 0 46%, transparent 47%);
+  box-shadow: inset 0 0 0 1px rgba(159,178,196,0.15);
+}
+.eye::before {
+  content: ""; position: absolute; inset: 24%; border-radius: 50%;
+  border: 2px solid rgba(111,224,242,0.35);
+  border-top-color: transparent; border-bottom-color: transparent;
+}
+.eye span {
+  position: absolute; inset: 38%; border-radius: 50%;
+  background: radial-gradient(circle at 45% 40%, #ffffff 0 8%, var(--glow) 22%, #1aa3bf 55%, rgba(26,163,191,0) 72%);
+  box-shadow: 0 0 40px 10px rgba(111,224,242,0.45), 0 0 120px 30px rgba(111,224,242,0.18);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .eye span { animation: pulse 4.5s ease-in-out infinite; }
+  .eye::before { animation: spin 24s linear infinite; }
+  @keyframes pulse { 0%,100% { transform: scale(1); filter: brightness(1); } 50% { transform: scale(1.08); filter: brightness(1.2); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+}
+
+/* Home: notice + log sit under the band */
+.hero { gap: 16px; }
+
+/* N7 ring */
+.n7 { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.ring { width: 112px; height: 112px; flex: none; }
+.ring-track { fill: none; stroke: var(--line); stroke-width: 8; }
+.ring-fill {
+  fill: none; stroke: var(--warm); stroke-width: 8; stroke-linecap: round;
+  transform: rotate(-90deg); transform-origin: 60px 60px;
+  transition: stroke-dasharray 1.2s ease-out;
+}
+.ring-label { font-family: var(--font-display); font-weight: 600; font-size: 24px; fill: var(--fg); }
+.ring-sub { font-family: var(--font-mono); font-size: 10px; fill: var(--muted); }
+.n7 .countdown { flex-direction: column; gap: 2px; align-items: flex-start; }
+
+/* Star-map timeline */
+.route { position: relative; padding-left: 0; }
+.route li.star, .route li.era { position: relative; padding-left: 34px; }
+.route::before {
+  content: ""; position: absolute; left: 9px; top: 8px; bottom: 8px; width: 2px;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent) 80%, var(--muted) 100%);
+  opacity: 0.45;
+}
+.route li.star { border-top: none; grid-template-columns: 6.5rem 1fr; }
+.route li.star::before {
+  content: ""; position: absolute; left: 4px; top: 22px; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft), 0 0 14px 2px var(--accent);
+}
+.route li.big::before { left: 1px; top: 19px; width: 18px; height: 18px; background: radial-gradient(circle, #fff 0 18%, var(--accent) 45%); }
+.route li.last::before {
+  background: var(--bg); border: 2px solid var(--warm); box-shadow: 0 0 0 4px var(--bg), 0 0 18px 2px var(--warm);
+}
+.route li.last .when { color: var(--warm); }
+.route li.era { padding-block: 28px 4px; }
+.route li.era span {
+  font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--muted); background: var(--bg); padding-right: 10px;
+}
+.route li.era::before {
+  content: ""; position: absolute; left: 6px; top: 32px; width: 8px; height: 8px; transform: rotate(45deg);
+  border: 1px solid var(--muted); background: var(--bg);
+}
+@media (max-width: 520px) { .route li.star { grid-template-columns: 1fr; } }
+
+/* Mission cards with drawn planets */
+.missions li.mission {
+  grid-template-columns: 76px 1fr; align-items: center; position: relative; overflow: hidden;
+  border-left: 3px solid var(--mc);
+}
+.missions li.mission::before { content: none; }
+.mission { --mc: var(--accent); }
+.mission.p1 { --mc: #4f9be0; --pa: #9fd0ff; --pb: #1f4f86; }
+.mission.p2 { --mc: #e0884f; --pa: #ffc79c; --pb: #8a3a16; }
+.mission.p3 { --mc: #d04f5f; --pa: #ffb0b8; --pb: #6e1a2a; }
+.mission.p4 { --mc: #5fbf9a; --pa: #b6f0d6; --pb: #1d5c46; }
+.mission-tag {
+  font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--mc); margin: 0 !important;
+}
+.planet {
+  width: 64px; height: 64px; border-radius: 50%; position: relative; justify-self: center;
+  background:
+    radial-gradient(circle at 32% 30%, var(--pa) 0 10%, transparent 45%),
+    repeating-linear-gradient(-20deg, rgba(255,255,255,0.10) 0 4px, transparent 4px 11px),
+    radial-gradient(circle at 40% 40%, var(--mc) 0 40%, var(--pb) 85%);
+  box-shadow: inset -10px -8px 16px rgba(0,0,0,0.45), 0 0 18px -2px var(--mc);
+}
+.mission.p2 .planet::after {
+  content: ""; position: absolute; left: -14px; right: -14px; top: 26px; height: 12px; border-radius: 50%;
+  border: 2px solid var(--pa); opacity: 0.7; transform: rotate(-14deg);
+}
+.mission.p4 .planet { width: 52px; height: 52px; }
+.mission.p4 .planet::after {
+  content: ""; position: absolute; width: 10px; height: 10px; border-radius: 50%; right: -12px; top: -6px;
+  background: var(--pa); box-shadow: 0 0 8px var(--mc);
+}
+
+/* typing cursor */
+.log .typing::after { content: "▍"; color: var(--log-fg); opacity: 0.8; }
+.route li.era { display: block; border-top: 1px solid var(--line); margin-left: 34px; padding-left: 0; }
+.route li.era::before { left: -28px; }
+
+/* ================= Real imagery (covers, key art, screenshots) ================= */
+.sky-art {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2;
+  opacity: 0.38; max-width: none;
+}
+.sky--home:has(.sky-art)::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(6,11,18,0.92) 0%, rgba(6,11,18,0.55) 55%, rgba(6,11,18,0.2) 100%);
+}
+.missions li.mission { grid-template-columns: 96px 1fr; }
+.mission .visual { display: grid; place-items: center; }
+.mission .cover {
+  width: 96px; height: auto; border-radius: 4px; display: block;
+  box-shadow: 0 6px 18px -6px rgba(0,0,0,0.5), 0 0 0 1px var(--line);
+}
+.mission .visual:has(.cover) .planet { display: none; }
+
+.gallery { margin-top: 56px; }
+.gallery h2 { margin-top: 0; }
+.gallery:not(:has(figure)) { display: none; }
+.shots {
+  display: grid; gap: 12px; margin-top: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+}
+.shots figure { margin: 0; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+.shots img { display: block; width: 100%; height: auto; }
+
+/* ================= Home hero, route 1: Kevin's own screenshot + animated eye glow and flare =================
+   The screenshot sits in a box with the image's own proportions, anchored right. The flare is placed
+   inside that box at the eye's position (--eye-x / --eye-y, measured on the image), so it stays on the eye
+   at every screen size. */
+.legion {
+  position: absolute; z-index: -3; right: 0; top: 14%; height: 165%; aspect-ratio: 1000 / 1111; max-width: none;
+}
+.sky-photo {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; display: block;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 30%, #000 85%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 55%, transparent 100%);
+  -webkit-mask-composite: source-in; mask-image: linear-gradient(90deg, transparent 0%, #000 30%, #000 85%, transparent 100%), linear-gradient(180deg, transparent 0%, #000 14%, #000 55%, transparent 100%);
+  mask-composite: intersect;
+}
+.sky--home:has(.legion) .eye, .sky--home:has(.legion) .stars { display: none; }
+.sky--home:has(.legion) .sky-inner { min-height: 540px; grid-template-columns: minmax(0, 1fr); position: relative; }
+.sky--home:has(.legion)::after {
+  content: ""; position: absolute; inset: 0; z-index: -2; pointer-events: none;
+  background: linear-gradient(90deg, rgba(6,11,18,0.92) 0%, rgba(6,11,18,0.55) 40%, rgba(6,11,18,0) 65%);
+}
+
+.flare { position: absolute; left: var(--eye-x); top: var(--eye-y); width: 0; height: 0; pointer-events: none; }
+.flare span { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); border-radius: 50%; }
+.flare .core { width: var(--core); height: var(--core); background: radial-gradient(circle, #fff 0 22%, #d9f6ff 38%, var(--glow) 55%, rgba(143,230,255,0) 72%); }
+.flare .halo { width: calc(var(--core) * 5); height: calc(var(--core) * 5); background: radial-gradient(circle, rgba(143,230,255,0.45) 0%, rgba(80,140,255,0.18) 35%, rgba(80,140,255,0) 70%); mix-blend-mode: screen; }
+.flare .streak { width: 260vw; height: calc(var(--core) * 0.3); background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,255,255,0.95) 0%, #6fd6ff 8%, #3b5bff 30%, rgba(59,91,255,0) 70%); mix-blend-mode: screen; filter: blur(1px); }
+.flare .streak2 { width: 140vw; height: calc(var(--core) * 0.9); background: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(59,91,255,0.35) 0%, rgba(59,91,255,0) 70%); mix-blend-mode: screen; filter: blur(6px); }
+.flare .ghost { width: 18px; height: 18px; border: 1px solid rgba(143,230,255,0.35); background: radial-gradient(circle, rgba(143,230,255,0.15), rgba(143,230,255,0) 70%); mix-blend-mode: screen; }
+.flare .g1 { margin-left: -30vw; } .flare .g2 { margin-left: -46vw; width: 34px; height: 34px; opacity: 0.6; } .flare .g3 { margin-left: 18vw; width: 10px; height: 10px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .legion { animation: drift 26s ease-in-out infinite alternate; transform-origin: 59% 12%; }
+  @keyframes drift { from { transform: scale(1); } to { transform: scale(1.06) translateY(-1%); } }
+  .flare .core { animation: core 4.8s ease-in-out infinite; }
+  .flare .halo, .flare .streak2 { animation: halo 4.8s ease-in-out infinite; }
+  .flare .streak { animation: streak 4.8s ease-in-out infinite; }
+  .flare .ghost { animation: ghost 9s ease-in-out infinite alternate; }
+  @keyframes core { 0%,100% { transform: translate(-50%,-50%) scale(1); } 50% { transform: translate(-50%,-50%) scale(1.15); } 53% { transform: translate(-50%,-50%) scale(0.94); } 56% { transform: translate(-50%,-50%) scale(1.12); } }
+  @keyframes halo { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
+  @keyframes streak { 0%,100% { transform: translate(-50%,-50%) scaleX(0.8); opacity: 0.8; } 50% { transform: translate(-50%,-50%) scaleX(1); opacity: 1; } }
+  @keyframes ghost { from { translate: -3vw 0; } to { translate: 3vw 0; } }
+}
+@media (max-width: 760px) {
+  .legion { right: -18%; top: 4%; height: 120%; }
+  .sky--home:has(.legion) .sky-inner { min-height: 600px; align-items: end; padding-top: 300px; }
+  .sky--home:has(.legion)::after { background: linear-gradient(0deg, rgba(6,11,18,0.96) 0%, rgba(6,11,18,0.7) 45%, rgba(6,11,18,0) 75%); }
+}
+
+/* Galaxy behind Legion: our own starfield + a soft drawn nebula; the screenshot's room fades into space */
+.sky--home:has(.legion) .stars { display: block; z-index: -4; }
+.sky--home:has(.legion) {
+  background:
+    radial-gradient(ellipse 38% 55% at 78% 30%, rgba(59,91,255,0.22), transparent 65%),
+    radial-gradient(ellipse 30% 40% at 90% 70%, rgba(176,90,200,0.14), transparent 70%),
+    radial-gradient(ellipse 60% 25% at 60% 18%, rgba(111,224,242,0.10), transparent 70%),
+    linear-gradient(180deg, #03060b 0%, #08111d 100%);
+}
+.sky--home .legion .sky-photo {
+  -webkit-mask-image: radial-gradient(ellipse 42% 38% at 58% 38%, #000 40%, rgba(0,0,0,0.55) 70%, transparent 100%);
+          mask-image: radial-gradient(ellipse 42% 38% at 58% 38%, #000 40%, rgba(0,0,0,0.55) 70%, transparent 100%);
+  -webkit-mask-composite: source-over; mask-composite: add;
+}
+.sky--home:has(.legion)::after {
+  background: linear-gradient(90deg, rgba(3,6,11,0.85) 0%, rgba(3,6,11,0.35) 40%, rgba(3,6,11,0) 60%);
+}
+
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); z-index: 30;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: min(92vw, 34rem);
+  background: var(--log-bg); color: var(--log-fg); font-family: var(--font-mono); font-size: 0.85rem;
+  padding: 12px 16px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* ================= Interactive timeline: two records, era filters, spoiler shield ================= */
+.tl-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.tl-tabs button {
+  font: inherit; font-family: var(--font-display); font-size: 1.05rem; cursor: pointer;
+  background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 6px;
+  padding: 10px 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left;
+}
+.tl-tabs button span { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.tl-tabs button[aria-selected="true"] { color: var(--fg); border-color: var(--accent); box-shadow: inset 0 -3px 0 var(--accent); }
+.tl-tabs button:hover { color: var(--fg); }
+.tl-panel { margin-top: 24px; }
+.js .tl-panel[hidden] { display: none !important; }
+
+.finished {
+  border: 1px solid var(--line); border-radius: 6px; padding: 12px 16px 14px; margin: 20px 0 0; max-width: 46rem;
+  display: flex; flex-wrap: wrap; gap: 8px 20px; background: var(--surface);
+}
+.finished legend { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0 6px; }
+.finished label { display: flex; align-items: center; gap: 8px; font-size: 0.98rem; cursor: pointer; }
+.finished input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+.eras { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.chip {
+  font: inherit; font-family: var(--font-mono); font-size: 0.78rem; cursor: pointer;
+  border: 1px solid var(--line); background: transparent; color: var(--muted);
+  border-radius: 999px; padding: 6px 12px;
+}
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.lore li[hidden] { display: none; }
+.lore .when { font-size: 0.8rem; }
+.lore li.star { grid-template-columns: 9.5rem 1fr; }
+@media (max-width: 520px) { .lore li.star { grid-template-columns: 1fr; } }
+
+details.spoiler { margin-top: 10px; border: 1px dashed var(--line); border-radius: 6px; padding: 8px 12px; }
+details.spoiler summary {
+  cursor: pointer; font-family: var(--font-mono); font-size: 0.8rem; color: var(--warm); list-style: none;
+}
+details.spoiler summary::-webkit-details-marker { display: none; }
+details.spoiler summary::before { content: "▸ "; }
+details.spoiler[open] summary::before { content: "▾ "; }
+details.spoiler[open] { border-style: solid; border-color: var(--warm); }
+details.spoiler p { margin-top: 6px; }
+@media (prefers-reduced-motion: no-preference) {
+  details.spoiler[open] p { animation: decrypt 0.6s ease-out; }
+  @keyframes decrypt { from { filter: blur(6px); opacity: 0; } to { filter: none; opacity: 1; } }
+}
+
+/* Phone menu on one line */
+@media (max-width: 480px) {
+  .site-header .wrap { gap: 8px 16px; padding-block: 10px; }
+  .nav { gap: 2px 12px; font-size: 0.86rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { white-space: nowrap; }
+}
+
+/* Articles */
+.article h2 { font-size: var(--step-2); }
+.article blockquote { margin: 0; border-left: 3px solid var(--warm); background: var(--surface); padding: 12px 16px; font-size: 0.98rem; }
+.article blockquote p + p { margin-top: 0.6em; }
+.article hr { border: 0; border-top: 1px solid var(--line); margin-block: 2em; }
+.article ul li a, .article p a { word-break: break-word; }
+.article table { border-collapse: collapse; width: 100%; font-size: 0.95rem; display: block; overflow-x: auto; }
+.article th, .article td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; }
+.report-link { border-style: solid; background: var(--surface); }
+.report-link .eyebrow { color: var(--accent); }
