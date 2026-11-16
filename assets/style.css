@@ -534,7 +534,7 @@ details.spoiler p { margin-top: 6px; }
 /* Phone menu on one line */
 @media (max-width: 480px) {
   .site-header .wrap { gap: 8px 16px; padding-block: 10px; }
-  .nav { gap: 2px 12px; font-size: 0.86rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+  .nav { gap: 2px 14px; font-size: 0.86rem; flex-wrap: wrap; max-width: 100%; }
   .nav::-webkit-scrollbar { display: none; }
   .nav a { white-space: nowrap; }
 }
@@ -642,28 +642,12 @@ details.spoiler p { margin-top: 6px; }
 @keyframes nebula-drift { from { transform: translate3d(-2%, 0, 0) scale(1); } to { transform: translate3d(2%, -2%, 0) scale(1.06); } }
 @media (prefers-reduced-motion: reduce) { .sky .nebula::before { animation: none; } }
 
-.sky--blue { --star-tint: #dce8ff;
-  --nebula: radial-gradient(ellipse 35% 45% at 75% 35%, rgba(59,91,255,0.20), transparent 70%),
-            radial-gradient(ellipse 25% 35% at 20% 80%, rgba(111,224,242,0.10), transparent 70%); }
-.sky--citadel { --star-tint: #ece0ff; --star-warm: #ffc7e6;
-  background: linear-gradient(180deg, #07050f 0%, #160f2a 100%);
-  --nebula: radial-gradient(ellipse 40% 55% at 80% 30%, rgba(150,95,255,0.26), transparent 70%),
-            radial-gradient(ellipse 30% 40% at 15% 90%, rgba(255,120,200,0.12), transparent 70%),
-            radial-gradient(ellipse 50% 20% at 55% 15%, rgba(120,170,255,0.10), transparent 70%); }
-.sky--andromeda { --star-tint: #dcffef; --star-warm: #fff2b8;
-  background: linear-gradient(180deg, #030a09 0%, #0a1d1a 100%);
-  --nebula: radial-gradient(ellipse 45% 50% at 78% 35%, rgba(60,220,160,0.20), transparent 70%),
-            radial-gradient(ellipse 30% 35% at 12% 85%, rgba(90,190,255,0.12), transparent 70%),
-            radial-gradient(ellipse 22% 28% at 92% 80%, rgba(220,240,120,0.08), transparent 70%); }
-.sky--reaper { --star-tint: #ffe6dc; --star-warm: #ffb08a;
-  background: linear-gradient(180deg, #0b0505 0%, #1f0c09 100%);
-  --nebula: radial-gradient(ellipse 45% 55% at 82% 30%, rgba(255,80,40,0.24), transparent 70%),
-            radial-gradient(ellipse 35% 30% at 10% 95%, rgba(255,150,60,0.12), transparent 70%),
-            radial-gradient(ellipse 18% 22% at 70% 75%, rgba(180,30,30,0.16), transparent 70%); }
-.sky--geth { --nebula: radial-gradient(ellipse 40% 55% at 85% 25%, rgba(111,224,242,0.16), transparent 70%),
-            radial-gradient(ellipse 30% 40% at 10% 95%, rgba(255,179,138,0.08), transparent 70%); }
-.sky--lost { --star-tint: #b9c4cf; background: linear-gradient(180deg, #050608 0%, #0e1116 100%);
-  --nebula: radial-gradient(ellipse 30% 40% at 80% 40%, rgba(255,70,70,0.10), transparent 70%); }
+/* One palette everywhere (Home's blue); the Milky Way band is drawn by site.js */
+.sky { --nebula: radial-gradient(ellipse 35% 45% at 75% 35%, rgba(59,91,255,0.20), transparent 70%),
+                 radial-gradient(ellipse 25% 35% at 20% 80%, rgba(111,224,242,0.10), transparent 70%);
+  background: radial-gradient(ellipse 38% 55% at 78% 30%, rgba(59,91,255,0.18), transparent 65%),
+              radial-gradient(ellipse 30% 40% at 90% 70%, rgba(176,90,200,0.10), transparent 70%),
+              linear-gradient(180deg, #03060b 0%, #08111d 100%); }
 
 /* Reserved image spots: each figure removes itself when its file is missing */
 .moment-shot { margin: 10px 0 0; max-width: 320px; }
@@ -677,3 +661,12 @@ details.spoiler p { margin-top: 6px; }
 .eye-shot { margin: 0; }
 .eye-shot img { height: 100%; object-fit: cover; background: #000; }
 @media (max-width: 560px) { .log-pair:has(.eye-shot) { grid-template-columns: 1fr; } .eye-shot img { aspect-ratio: 16 / 9; } }
+
+/* Relay network: curated links */
+.relays { list-style: none; padding: 0; margin: 12px 0 8px; display: grid; gap: 12px; }
+.relays li { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; }
+.relays li > a { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; text-decoration: none; }
+.relays li > a::after { content: " ↗"; font-size: 0.85em; opacity: 0.6; }
+.relays li > a:hover { text-decoration: underline; }
+.relays li p { margin: 4px 0 0; }
+.relay-meta { margin-left: 8px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
