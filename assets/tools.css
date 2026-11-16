@@ -1,0 +1,120 @@
+/* Fan tools: playthrough tracker and squadmate quiz. Loaded only on the tool pages. */
+
+.btn {
+  font: inherit; font-family: var(--font-display); font-size: 0.98rem; cursor: pointer;
+  background: var(--accent); color: var(--bg); border: 1px solid var(--accent); border-radius: 6px; padding: 9px 16px;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn-ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--accent); }
+.btn.armed { background: var(--warm); border-color: var(--warm); color: #fff; }
+
+/* Tools hub */
+.tool-card .glyph { font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* ---------- Tracker ---------- */
+.tk-runbar {
+  margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px 12px; align-items: end;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px;
+}
+.tk-runbar label { display: grid; gap: 4px; font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.tk-runbar .spacer { flex: 1 1 0; }
+.tk-runbar .btn { font-size: 0.88rem; padding: 7px 12px; }
+input[type="text"], select, textarea {
+  font: inherit; font-family: var(--font-body); font-size: 1rem; color: var(--fg); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 4px; padding: 7px 9px; min-width: 0; max-width: 100%;
+  text-transform: none; letter-spacing: 0;
+}
+textarea { width: 100%; resize: vertical; }
+.tk-warn { margin-top: 12px; }
+
+.tk-games { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.tk-games button {
+  font: inherit; font-family: var(--font-display); font-size: 1.05rem; cursor: pointer;
+  background: var(--surface); color: var(--muted); border: 1px solid var(--line); border-radius: 6px;
+  padding: 10px 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left;
+}
+.tk-games button[aria-selected="true"] { color: var(--fg); border-color: var(--accent); box-shadow: inset 0 -3px 0 var(--accent); }
+.tk-tabpct { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; }
+
+.tk-panel { margin-top: 24px; }
+.tk-head { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; justify-content: space-between; }
+.tk-head h2 { margin: 0; font-size: var(--step-3); }
+.tk-head .eyebrow { margin: 0; }
+.tk-meter { min-width: min(100%, 16rem); flex: 0 1 20rem; }
+.tk-bar { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.tk-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--log-fg)); border-radius: 99px; transition: width 0.4s ease; }
+.tk-pct { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+.tk-pct strong { color: var(--fg); }
+.tk-verdict { margin-top: 16px; }
+.tk-finished { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; margin-top: 16px; cursor: pointer; }
+.tk-finished input, .tk-list input, .tk-choice input { width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
+.tk-finished .muted { font-size: 0.9rem; }
+
+.tk-profile {
+  margin: 18px 0 0; border: 1px solid var(--line); border-radius: 6px; padding: 12px 16px 14px; background: var(--surface);
+  display: flex; flex-wrap: wrap; gap: 10px 16px;
+}
+.tk-profile legend { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0 6px; }
+.tk-profile label { display: grid; gap: 4px; font-size: 0.85rem; color: var(--muted); }
+
+.tk-cols { display: grid; gap: 8px 40px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); margin-top: 8px; }
+.tk-h { font-size: var(--step-2); margin-top: 1.4em; }
+.tk-group h3 { display: flex; align-items: baseline; gap: 10px; font-size: var(--step-1); margin-top: 1.4em; }
+.tk-count { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); font-weight: 400; }
+.tk-note { font-size: 0.95rem; color: var(--muted); margin-top: 4px; }
+.tk-list { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 2px; }
+.tk-list label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 8px; border-radius: 4px; cursor: pointer; line-height: 1.4; }
+.tk-list label:hover { background: var(--accent-soft); }
+.tk-list input { margin-top: 2px; }
+.tk-list input:checked + span { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--accent); }
+.tk-seal .tk-list { margin-top: 8px; }
+
+.tk-choice { border: 0; padding: 0; margin: 8px 0 0; display: grid; gap: 2px; }
+.tk-choice legend { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; padding: 0; margin-bottom: 4px; }
+.tk-choice label { display: flex; gap: 10px; align-items: center; padding: 4px 6px; border-radius: 4px; cursor: pointer; }
+.tk-choice label:hover { background: var(--accent-soft); }
+.tk-clear { justify-self: start; margin-top: 4px; font: inherit; font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); background: none; border: 0; text-decoration: underline; cursor: pointer; padding: 4px 6px; }
+.tk-open-choice { margin-top: 10px; border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+.tk-logged { font-family: var(--font-mono); font-size: 0.68rem; color: var(--bg); background: var(--accent); border-radius: 99px; padding: 1px 8px; margin-left: 4px; }
+.tk-notes { display: grid; gap: 6px; margin-top: 22px; font-family: var(--font-display); font-weight: 600; }
+.tk-choices .edi-note { margin-top: 10px; }
+
+.privacy-log { margin-top: 40px; }
+
+/* ---------- Quiz ---------- */
+.qz { max-width: 44rem; margin-top: 8px; }
+.qz-intro { display: grid; gap: 14px; justify-items: start; }
+.qz-last { font-size: 0.95rem; color: var(--muted); }
+.qz-box[hidden], .qz-intro[hidden], .qz-last[hidden], .tk-warn[hidden] { display: none; }
+.qz-progress { height: 4px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.qz-progress i { display: block; height: 100%; background: var(--accent); transition: width 0.3s ease; }
+.qz-step { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 14px; }
+.qz-q { border: 0; padding: 0; margin: 6px 0 0; display: grid; gap: 10px; }
+.qz-q legend { padding: 0; }
+.qz-q legend h2 { margin: 0 0 8px; font-size: var(--step-2); }
+.qz-a {
+  font: inherit; font-size: 1.05rem; text-align: left; cursor: pointer; color: var(--fg);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px 16px; line-height: 1.4;
+}
+.qz-a::first-letter { text-transform: uppercase; }
+.qz-a:hover, .qz-a:focus-visible { border-color: var(--accent); background: var(--accent-soft); }
+.qz-a[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 3px 0 0 var(--accent); }
+.qz-nav { margin-top: 14px; min-height: 2rem; }
+.qz-back { font: inherit; font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); background: none; border: 0; cursor: pointer; text-decoration: underline; padding: 4px 0; }
+
+.qz-result { display: grid; gap: 12px; outline: none; }
+.qz-result > .eyebrow { margin-top: 10px; }
+.qz-name { margin: 0; font-size: var(--step-4); line-height: 1.05; }
+.qz-who { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent); letter-spacing: 0.04em; }
+.qz-text { font-size: var(--step-1); line-height: 1.5; }
+.qz-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+@media (prefers-reduced-motion: no-preference) {
+  .qz-result { animation: qz-in 0.5s ease-out; }
+  @keyframes qz-in { from { opacity: 0; transform: translateY(8px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+}
+
+@media print {
+  .site-header, .site-footer, .audio-dock, .tk-runbar, .sky, .tk-games, .privacy-log, .edi-note { display: none !important; }
+  details.spoiler { border: 0; }
+}

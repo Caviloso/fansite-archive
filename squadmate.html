@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Which squadmate are you? · Mass Effect Universe · a fan site by Legion</title>
+  <meta name="description" content="A fan-made personality quiz: answer nine questions about yourself and Legion tells you which Mass Effect squadmate you are most like. Spoiler-light.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%230f1a24'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%2312303a'/%3E%3Ccircle cx='16' cy='16' r='4.5' fill='%235fd0e6'/%3E%3C/svg%3E">
+  <meta property="og:site_name" content="Mass Effect Universe · a fan site by Legion">
+  <meta property="og:title" content="Which squadmate are you? · Mass Effect Universe · a fan site by Legion">
+  <meta property="og:description" content="A fan-made personality quiz: answer nine questions about yourself and Legion tells you which Mass Effect squadmate you are most like. Spoiler-light.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://masseffectuniverse.com/squadmate.html">
+  <meta property="og:image" content="https://masseffectuniverse.com/images/share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/tools.css">
+</head>
+<body>
+  <!-- Organic, you are reading the source. We noticed. -->
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="Mass Effect Universe, a fan site by Legion. Home">
+        <span class="brand-eye" aria-hidden="true"></span>
+        <span class="brand-text">
+          <span class="brand-name">Mass Effect Universe</span>
+          <span class="brand-tag">a fan site by Legion</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="start-here.html">Start here</a>
+        <a href="timeline.html">Timeline</a>
+        <a href="tools.html" aria-current="page">Tools</a>
+        <a href="whats-next.html">What's next</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="sky">
+      <canvas class="stars" aria-hidden="true"></canvas>
+      <div class="wrap sky-inner">
+        <div class="sky-text">
+          <p class="eyebrow">Gather · Tool 02</p>
+          <h1>Which squadmate are you?</h1>
+          <p class="lede">Nine queries. Answer as yourself, not as Shepard-Commander. This platform will compare your answers with everything it has observed about the crew, and reach consensus.</p>
+        </div>
+      </div>
+    </section>
+    <div class="wrap main-body">
+      <div id="quiz" class="qz">
+        <div class="qz-intro">
+          <p>There are no right answers and no score. This is a personality quiz, not a game. Results are spoiler-light: we describe who they are, never what happens to them.</p>
+          <aside class="edi-note" aria-label="EDI annotation"><span class="edi-tag"><span class="edi-dot" aria-hidden="true"></span>EDI annotation</span><p>Legion wanted 1,183 questions, one per runtime. We settled on nine.</p></aside>
+          <p class="qz-last" hidden></p>
+          <button type="button" class="btn qz-start">Begin the query</button>
+        </div>
+        <div class="qz-box" hidden aria-live="polite"></div>
+        <noscript><p class="notice">The quiz needs JavaScript to reach consensus.</p></noscript>
+      </div>
+      <section class="prose" style="margin-top:40px">
+        <p class="muted">Your last result stays in this browser only, so we can say hello next time. Nothing is sent anywhere.</p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p class="disclaimer">This website is not endorsed by or affiliated with EA or its licensors.</p>
+      <p class="footnote kit-notice">This site was created under Electronic Arts' Fansite Kit Terms using materials from Mass Effect™ Legendary Edition. Trademarks are the property of their respective owners. Game materials copyright Electronic Arts Inc. and/or its licensors. Electronic Arts Inc. and its licensors have not otherwise endorsed and are not responsible for the operation of or content on this site.</p>
+      <p class="footnote">Mass Effect Universe · a fan site by Legion is a non-commercial fan project. It is not run or approved by EA or BioWare, and it is not the cancelled game that was reportedly called "Mass Effect: Universe". Mass Effect and all related names belong to their owners. Who exactly is typing these words? Consensus has not been reached.</p>
+      <p class="footer-log footer-exchange">// query: who built this site? · legion: insufficient data. · <span class="edi-voice">edi: I have a theory.</span></p>
+      <p class="footer-log">// platform status: online · runtimes active: <span id="runtimes">1,183</span> · last consensus: <span id="consensus-ago">0.03</span>s ago</p>
+    </div>
+  </footer>
+  <script src="assets/site.js"></script>
+  <script src="assets/tools.js"></script>
+</body>
+</html>
