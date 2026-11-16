@@ -603,9 +603,17 @@ details.spoiler p { margin-top: 6px; }
 .edi-eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8fb0ff !important; }
 .edi-holo { position: relative; width: 180px; aspect-ratio: 1; }
 .edi-orb { width: 100%; height: 100%; display: block; overflow: visible; }
-.edi-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
-  -webkit-mask-image: radial-gradient(circle, #000 55%, transparent 72%); mask-image: radial-gradient(circle, #000 55%, transparent 72%); }
-.edi-banner.has-photo .edi-sphere { display: none; }
+.edi-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block;
+  filter: drop-shadow(0 0 14px rgba(79,125,255,0.55)); }
+.edi-banner.has-photo .edi-holo { aspect-ratio: 340 / 520; width: 150px; }
+.edi-banner.has-photo .edi-orb { display: none; }
+.edi-banner.has-photo .edi-photo { animation: edi-flicker 6s steps(1) infinite, edi-bob 5s ease-in-out infinite; }
+.edi-holo::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(170,200,255,0.22) 50%, transparent 100%);
+  background-size: 100% 30%; background-repeat: no-repeat; }
+.edi-banner.has-photo .edi-holo::after { -webkit-mask: url(../images/edi.png) center / contain no-repeat; mask: url(../images/edi.png) center / contain no-repeat; opacity: 1; animation: edi-sweep 4.5s linear infinite; mix-blend-mode: screen; }
+@keyframes edi-sweep { from { background-position: 0 -40%; } to { background-position: 0 140%; } }
+.edi-sphere { display: none; }
 .edi-sphere { animation: edi-flicker 6s steps(1) infinite, edi-bob 5s ease-in-out infinite; transform-origin: 100px 100px; }
 .edi-core { animation: edi-pulse 2.6s ease-in-out infinite; transform-origin: 100px 100px; transform-box: view-box; }
 .edi-meridians { animation: edi-spin 9s linear infinite; transform-origin: 100px 100px; transform-box: view-box; }
@@ -618,9 +626,10 @@ details.spoiler p { margin-top: 6px; }
 @keyframes edi-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 @keyframes edi-flicker { 0%,100% { opacity: 1; } 47% { opacity: 1; } 48% { opacity: 0.55; } 49% { opacity: 1; } 83% { opacity: 0.8; } 84% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {
-  .edi-sphere, .edi-core, .edi-meridians, .edi-ring { animation: none !important; }
+  .edi-sphere, .edi-core, .edi-meridians, .edi-ring, .edi-photo, .edi-holo::after { animation: none !important; }
 }
 @media (max-width: 560px) {
   .edi-banner { grid-template-columns: 1fr; justify-items: center; text-align: center; padding: 20px 16px; }
   .edi-holo { width: 150px; }
+  .edi-banner.has-photo .edi-holo { width: 130px; }
 }
