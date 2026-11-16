@@ -13,6 +13,8 @@
   --warm: #b4532a;        /* the human fan's colour, used sparingly */
   --log-bg: #0f1a24;
   --log-fg: #9fe3f0;
+  --edi: #3352c4;        /* EDI's blue: a guest voice, distinct from Legion's cyan */
+  --edi-soft: #e8eeff;
 
   --font-display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
   --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -41,6 +43,10 @@
     --warm: #f0915f;
     --log-bg: #060c12;
     --log-fg: #8fdcec;
+  --edi: #9db8ff;
+  --edi-soft: #151f3d;
+    --edi: #9db8ff;
+    --edi-soft: #151f3d;
     color-scheme: dark;
   }
 }
@@ -571,3 +577,50 @@ details.spoiler p { margin-top: 6px; }
 @media (max-width: 520px) { .audio-label { display: none; } .audio-btn { padding: 10px; } }
 .audio-player { position: relative; }
 .audio-hide { position: absolute; top: -26px; right: 0; background: var(--log-bg); color: var(--log-fg); border: 1px solid rgba(95,208,230,0.35); border-radius: 4px; font-family: var(--font-mono); font-size: 0.7rem; padding: 2px 8px; cursor: pointer; }
+
+/* EDI: a second AI voice. Margin annotations, an About banner, a footer reply. */
+.edi-note {
+  margin: 24px 0; padding: 12px 16px 12px 14px; max-width: var(--measure);
+  background: var(--edi-soft); border-left: 3px solid var(--edi); border-radius: 0 4px 4px 0;
+}
+.edi-note p { margin: 4px 0 0; font-style: italic; }
+.edi-tag { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 0.72rem;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--edi); }
+.edi-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--edi); box-shadow: 0 0 8px var(--edi); }
+.edi-voice { color: var(--edi); }
+
+.edi-banner {
+  margin: 32px 0 8px; display: grid; grid-template-columns: 180px 1fr; gap: 24px; align-items: center;
+  padding: 20px 24px; border-radius: 6px; color: #dfe8ff;
+  background: radial-gradient(120% 140% at 0% 50%, #18306f 0%, #0b1433 45%, #070b1c 100%);
+  border: 1px solid rgba(127,166,255,0.25); overflow: hidden; position: relative;
+}
+.edi-banner::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(160,190,255,0.05) 0 1px, transparent 1px 3px); }
+.edi-banner figcaption { position: relative; z-index: 1; }
+.edi-banner h2 { margin: 2px 0 6px; color: #fff; letter-spacing: 0.12em; }
+.edi-banner figcaption p { margin: 0; color: #c7d6ff; }
+.edi-eyebrow { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: #8fb0ff !important; }
+.edi-holo { position: relative; width: 180px; aspect-ratio: 1; }
+.edi-orb { width: 100%; height: 100%; display: block; overflow: visible; }
+.edi-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+  -webkit-mask-image: radial-gradient(circle, #000 55%, transparent 72%); mask-image: radial-gradient(circle, #000 55%, transparent 72%); }
+.edi-banner.has-photo .edi-sphere { display: none; }
+.edi-sphere { animation: edi-flicker 6s steps(1) infinite, edi-bob 5s ease-in-out infinite; transform-origin: 100px 100px; }
+.edi-core { animation: edi-pulse 2.6s ease-in-out infinite; transform-origin: 100px 100px; transform-box: view-box; }
+.edi-meridians { animation: edi-spin 9s linear infinite; transform-origin: 100px 100px; transform-box: view-box; }
+.edi-ring { transform-origin: 100px 100px; transform-box: view-box; }
+.edi-ring.r1 { animation: edi-tilt 12s linear infinite; }
+.edi-ring.r2 { animation: edi-tilt 18s linear infinite reverse; }
+@keyframes edi-pulse { 0%,100% { transform: scale(0.85); opacity: 0.8; } 50% { transform: scale(1.15); opacity: 1; } }
+@keyframes edi-spin { from { transform: scaleX(1); } 50% { transform: scaleX(-1); } to { transform: scaleX(1); } }
+@keyframes edi-tilt { from { transform: rotate(-12deg); } 50% { transform: rotate(12deg); } to { transform: rotate(-12deg); } }
+@keyframes edi-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes edi-flicker { 0%,100% { opacity: 1; } 47% { opacity: 1; } 48% { opacity: 0.55; } 49% { opacity: 1; } 83% { opacity: 0.8; } 84% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .edi-sphere, .edi-core, .edi-meridians, .edi-ring { animation: none !important; }
+}
+@media (max-width: 560px) {
+  .edi-banner { grid-template-columns: 1fr; justify-items: center; text-align: center; padding: 20px 16px; }
+  .edi-holo { width: 150px; }
+}
