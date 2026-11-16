@@ -58,9 +58,60 @@
           r: L.size[0] + Math.random() * (L.size[1] - L.size[0]), t: Math.random() * 6.3, warm: Math.random() < 0.08 });
       });
     }
+    // The Milky Way: a diagonal band of faint stars, glow, clusters and dark dust lanes,
+    // painted once per resize onto its own canvas and then moved as a single layer.
+    var band = document.createElement("canvas"), PAD = 60;
+    function gauss() { var u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2832 * v); }
+    function paintBand() {
+      var bw = w + PAD * 2, bh = h + PAD * 2, small = w < 600;
+      band.width = Math.round(bw * dpr); band.height = Math.round(bh * dpr);
+      var b = band.getContext("2d"); b.setTransform(dpr, 0, 0, dpr, 0, 0);
+      // band runs from lower left to upper right
+      var x0 = -bw * 0.1, y0 = bh * 0.95, x1 = bw * 1.1, y1 = bh * 0.05;
+      var dx = x1 - x0, dy = y1 - y0, len = Math.sqrt(dx * dx + dy * dy), nx = -dy / len, ny = dx / len;
+      var sigma = Math.min(bh, bw) * 0.16;
+      function at(t, off) { return [x0 + dx * t + nx * off, y0 + dy * t + ny * off]; }
+      function blob(x, y, r, col, a) {
+        var g = b.createRadialGradient(x, y, 0, x, y, r);
+        g.addColorStop(0, "rgba(" + col + "," + a + ")"); g.addColorStop(1, "rgba(" + col + ",0)");
+        b.fillStyle = g; b.fillRect(x - r, y - r, r * 2, r * 2);
+      }
+      var cols = ["120,150,255", "150,130,255", "110,200,240", "230,225,255"];
+      for (var i = 0; i < (small ? 40 : 90); i++) {
+        var t = Math.random(), p = at(t, gauss() * sigma * 0.6);
+        blob(p[0], p[1], sigma * (0.5 + Math.random() * 1.1), cols[i % 4], i % 4 === 3 ? 0.05 : 0.075);
+      }
+      var n = Math.round((bw * bh) / (small ? 200 : 85));
+      for (i = 0; i < n; i++) {
+        p = at(Math.random(), gauss() * sigma);
+        b.globalAlpha = 0.15 + Math.random() * 0.5;
+        b.fillStyle = Math.random() < 0.15 ? "#cdd8ff" : (Math.random() < 0.1 ? "#ffe9d6" : "#e8f0ff");
+        b.fillRect(p[0], p[1], Math.random() < 0.9 ? 0.7 : 1.2, Math.random() < 0.9 ? 0.7 : 1.2);
+      }
+      for (var k = 0; k < (small ? 6 : 14); k++) {
+        var c0 = at(Math.random(), gauss() * sigma * 0.5), cr = 6 + Math.random() * 16;
+        blob(c0[0], c0[1], cr * 2.2, "200,215,255", 0.08);
+        for (i = 0; i < 40; i++) {
+          b.globalAlpha = 0.3 + Math.random() * 0.6; b.fillStyle = "#eef3ff";
+          b.fillRect(c0[0] + gauss() * cr, c0[1] + gauss() * cr, 0.8, 0.8);
+        }
+      }
+      b.globalAlpha = 1;
+      // dust lanes: soft, stretched dark streaks along the band that eat some light
+      b.globalCompositeOperation = "destination-out";
+      for (i = 0; i < (small ? 14 : 30); i++) {
+        t = Math.random(); p = at(t, sigma * (0.1 + gauss() * 0.25));
+        b.save(); b.translate(p[0], p[1]); b.rotate(Math.atan2(dy, dx) + gauss() * 0.08); b.scale(3.5 + Math.random() * 3, 1);
+        var r = sigma * (0.12 + Math.random() * 0.18), g = b.createRadialGradient(0, 0, 0, 0, 0, r);
+        g.addColorStop(0, "rgba(0,0,0,0.55)"); g.addColorStop(1, "rgba(0,0,0,0)");
+        b.fillStyle = g; b.fillRect(-r, -r, r * 2, r * 2); b.restore();
+      }
+      b.globalCompositeOperation = "source-over";
+    }
     function draw(time) {
       ctx.clearRect(0, 0, w, h);
       px += (tx - px) * 0.06; py += (ty - py) * 0.06;
+      if (band.width) { ctx.globalAlpha = 0.9; ctx.drawImage(band, -PAD + px * 0.12, -PAD + (py + sy) * 0.12, w + PAD * 2, h + PAD * 2); ctx.globalAlpha = 1; }
       for (var i = 0; i < stars.length; i++) {
         var s = stars[i], L = LAYERS[s.l];
         if (!reduce) { s.x -= L.speed; if (s.x < -40) s.x = w + 40; }
@@ -90,8 +141,8 @@
       if (!reduce && visible) requestAnimationFrame(draw); else running = false;
     }
     function start() { if (!running) { running = true; requestAnimationFrame(draw); } }
-    seed(); start();
-    window.addEventListener("resize", function () { seed(); if (reduce) start(); });
+    seed(); paintBand(); start();
+    window.addEventListener("resize", function () { seed(); paintBand(); if (reduce) start(); });
     if (reduce) return;
     if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) start(); }).observe(sky);
     window.addEventListener("scroll", function () { sy = -window.scrollY * 0.25; }, { passive: true });
