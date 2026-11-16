@@ -534,7 +534,7 @@ details.spoiler p { margin-top: 6px; }
 /* Phone menu on one line */
 @media (max-width: 480px) {
   .site-header .wrap { gap: 8px 16px; padding-block: 10px; }
-  .nav { gap: 2px 12px; font-size: 0.86rem; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+  .nav { gap: 2px 14px; font-size: 0.86rem; flex-wrap: wrap; max-width: 100%; }
   .nav::-webkit-scrollbar { display: none; }
   .nav a { white-space: nowrap; }
 }
@@ -633,3 +633,40 @@ details.spoiler p { margin-top: 6px; }
   .edi-holo { width: 150px; }
   .edi-banner.has-photo .edi-holo { width: 130px; }
 }
+
+/* Starfield upgrade: a colour per page, a drifting nebula layer, star tints read by site.js */
+.sky { --star-tint: #d9f6ff; --star-warm: #ffd2b0; }
+.sky .nebula { position: absolute; inset: -20% -10%; z-index: -2; pointer-events: none; will-change: transform; }
+.sky .nebula::before { content: ""; position: absolute; inset: 0; opacity: 0.9;
+  background: var(--nebula); animation: nebula-drift 60s ease-in-out infinite alternate; }
+@keyframes nebula-drift { from { transform: translate3d(-2%, 0, 0) scale(1); } to { transform: translate3d(2%, -2%, 0) scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { .sky .nebula::before { animation: none; } }
+
+/* One palette everywhere (Home's blue); the Milky Way band is drawn by site.js */
+.sky { --nebula: radial-gradient(ellipse 35% 45% at 75% 35%, rgba(59,91,255,0.20), transparent 70%),
+                 radial-gradient(ellipse 25% 35% at 20% 80%, rgba(111,224,242,0.10), transparent 70%);
+  background: radial-gradient(ellipse 38% 55% at 78% 30%, rgba(59,91,255,0.18), transparent 65%),
+              radial-gradient(ellipse 30% 40% at 90% 70%, rgba(176,90,200,0.10), transparent 70%),
+              linear-gradient(180deg, #03060b 0%, #08111d 100%); }
+
+/* Reserved image spots: each figure removes itself when its file is missing */
+.moment-shot { margin: 10px 0 0; max-width: 320px; }
+.moment-shot img, .wide-shot img, .eye-shot img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--line); }
+.moment-shot img { aspect-ratio: 16 / 9; object-fit: cover; }
+.wide-shot { margin: 20px 0 24px; max-width: var(--measure); }
+.wide-shot img { aspect-ratio: 16 / 9; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+.log-pair { margin-top: 28px; display: grid; gap: 16px; }
+.log-pair .log { margin: 0; }
+.log-pair:has(.eye-shot) { grid-template-columns: minmax(0, 1fr) 200px; align-items: stretch; }
+.eye-shot { margin: 0; }
+.eye-shot img { height: 100%; object-fit: cover; background: #000; }
+@media (max-width: 560px) { .log-pair:has(.eye-shot) { grid-template-columns: 1fr; } .eye-shot img { aspect-ratio: 16 / 9; } }
+
+/* Relay network: curated links */
+.relays { list-style: none; padding: 0; margin: 12px 0 8px; display: grid; gap: 12px; }
+.relays li { padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; }
+.relays li > a { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; text-decoration: none; }
+.relays li > a::after { content: " ↗"; font-size: 0.85em; opacity: 0.6; }
+.relays li > a:hover { text-decoration: underline; }
+.relays li p { margin: 4px 0 0; }
+.relay-meta { margin-left: 8px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
