@@ -180,3 +180,76 @@ try {
   boxes.forEach(function (b) { b.checked = saved.indexOf(b.value) !== -1; b.addEventListener("change", apply); });
   if (saved.length) apply();
 })();
+
+// Audio channel: the Mass Effect Theme, streamed from Spotify's official embed (nothing is hosted here).
+// Browsers do not allow sound before a visitor interacts, so on Home it starts on the first click or tap.
+// Spotify is only contacted after that interaction, or when the button is pressed.
+(function () {
+  var TRACK = "spotify:track:69ySIzFcdu5MDs7CNNTLLk", KEY = "meu-audio";
+  var pref = null; try { pref = localStorage.getItem(KEY); } catch (e) {}
+  var home = !!document.querySelector(".sky--home");
+
+  var dock = document.createElement("div");
+  dock.className = "audio-dock"; dock.setAttribute("data-state", "standby");
+  dock.innerHTML =
+    '<button type="button" class="audio-btn" aria-pressed="false" aria-label="Play the Mass Effect Theme">' +
+      '<span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>' +
+      '<span class="audio-label">audio.channel: standby</span>' +
+    '</button>' +
+    '<div class="audio-player" hidden><button type="button" class="audio-hide" aria-label="Hide the player (music keeps playing)">hide</button><div id="audio-embed"></div>' +
+      '<p class="audio-credit">Mass Effect Theme · Jack Wall &amp; Sam Hulick · streamed from Spotify</p></div>';
+  document.body.appendChild(dock);
+
+  var btn = dock.querySelector(".audio-btn"), label = dock.querySelector(".audio-label"),
+      panel = dock.querySelector(".audio-player"), ctrl = null, loading = false, playing = false, wantPlay = false;
+
+  function setState(s, text) {
+    dock.setAttribute("data-state", s); label.textContent = "audio.channel: " + text;
+    btn.setAttribute("aria-pressed", s === "playing" ? "true" : "false");
+    btn.setAttribute("aria-label", s === "playing" ? "Pause the Mass Effect Theme" : "Play the Mass Effect Theme");
+  }
+  function save(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
+
+  function load(then) {
+    if (ctrl) { then(); return; }
+    wantPlay = true; if (loading) return; loading = true;
+    setState("loading", "establishing link…"); panel.hidden = false;
+    window.onSpotifyIframeApiReady = function (API) {
+      API.createController(document.getElementById("audio-embed"),
+        { uri: TRACK, width: "100%", height: 80 },
+        function (c) {
+          ctrl = c;
+          c.addListener("ready", function () { if (wantPlay) { try { c.play(); } catch (e) {} } setState("ready", "linked · press play in the player"); });
+          c.addListener("playback_update", function (e) {
+            playing = !e.data.isPaused; if (playing) save("on");
+            setState(playing ? "playing" : "paused", playing ? "playing" : "paused");
+          });
+        });
+    };
+    var s = document.createElement("script");
+    s.src = "https://open.spotify.com/embed/iframe-api/v1"; s.async = true;
+    s.onerror = function () { setState("error", "link failed"); panel.hidden = true; };
+    document.head.appendChild(s);
+  }
+
+  dock.querySelector(".audio-hide").addEventListener("click", function (e) { e.stopPropagation(); panel.hidden = true; });
+  btn.addEventListener("click", function (e) {
+    if (ctrl && panel.hidden) { panel.hidden = false; }
+    e.stopPropagation(); disarm();
+    if (!ctrl) { save("on"); load(function () {}); return; }
+    if (playing) { ctrl.pause(); save("off"); } else { ctrl.resume ? ctrl.resume() : ctrl.togglePlay(); save("on"); }
+  });
+
+  // Home (or any page once a visitor has listened before): the first click, tap or key press starts the theme,
+  // unless the visitor switched it off.
+  function arm() { load(function () {}); disarm(); }
+  function disarm() {
+    document.removeEventListener("pointerdown", arm, true);
+    document.removeEventListener("keydown", arm, true);
+  }
+  if (pref === "on" || (home && pref !== "off")) {
+    setState("standby", "standby · engages on first contact");
+    document.addEventListener("pointerdown", arm, true);
+    document.addEventListener("keydown", arm, true);
+  }
+})();

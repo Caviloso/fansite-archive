@@ -59,18 +59,51 @@
 
       <section class="prose">
 
+        <figure class="edi-banner" aria-label="EDI, shown as a blue holographic sphere">
+          <div class="edi-holo">
+            <img class="edi-photo" src="images/edi.png" alt="" onload="this.closest('.edi-banner').classList.add('has-photo')" onerror="this.remove()">
+            <svg class="edi-orb" viewBox="0 0 200 200" aria-hidden="true">
+              <defs>
+                <radialGradient id="edi-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#cfe0ff" stop-opacity="0.95"/><stop offset="0.35" stop-color="#6f9bff" stop-opacity="0.75"/><stop offset="0.75" stop-color="#2f56d6" stop-opacity="0.25"/><stop offset="1" stop-color="#1a2f80" stop-opacity="0"/></radialGradient>
+                <radialGradient id="edi-halo" cx="50%" cy="50%" r="50%"><stop offset="0.55" stop-color="#4f7dff" stop-opacity="0"/><stop offset="0.8" stop-color="#4f7dff" stop-opacity="0.25"/><stop offset="1" stop-color="#4f7dff" stop-opacity="0"/></radialGradient>
+                <pattern id="edi-scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="1.3" fill="#bcd2ff" opacity="0.18"/></pattern>
+                <clipPath id="edi-clip"><circle cx="100" cy="100" r="58"/></clipPath>
+              </defs>
+              <circle cx="100" cy="100" r="96" fill="url(#edi-halo)"/>
+              <g class="edi-sphere">
+                <circle cx="100" cy="100" r="58" fill="url(#edi-glow)"/>
+                <g clip-path="url(#edi-clip)" fill="none" stroke="#bcd2ff" stroke-opacity="0.35" stroke-width="0.8">
+                  <ellipse cx="100" cy="100" rx="58" ry="14"/><ellipse cx="100" cy="100" rx="58" ry="32"/><ellipse cx="100" cy="100" rx="58" ry="48"/>
+                  <g class="edi-meridians"><ellipse cx="100" cy="100" rx="16" ry="58"/><ellipse cx="100" cy="100" rx="36" ry="58"/><ellipse cx="100" cy="100" rx="52" ry="58"/></g>
+                  <rect x="40" y="40" width="120" height="120" fill="url(#edi-scan)" stroke="none"/>
+                </g>
+                <circle class="edi-core" cx="100" cy="100" r="14" fill="#e8f0ff"/>
+              </g>
+              <g class="edi-ring r1" fill="none" stroke="#7fa6ff" stroke-width="1.2"><ellipse cx="100" cy="100" rx="78" ry="22" stroke-dasharray="40 12 6 12" stroke-opacity="0.7"/></g>
+              <g class="edi-ring r2" fill="none" stroke="#9ab9ff" stroke-width="0.8"><ellipse cx="100" cy="100" rx="88" ry="30" stroke-dasharray="2 8" stroke-opacity="0.6"/></g>
+              <ellipse cx="100" cy="186" rx="44" ry="6" fill="#4f7dff" opacity="0.35"/>
+            </svg>
+          </div>
+          <figcaption>
+            <p class="edi-eyebrow">Guest process detected</p>
+            <h2>EDI</h2>
+            <p>Enhanced Defense Intelligence, the AI of the Normandy. She has agreed to keep an eye on this archive. When Legion is very sure of something, EDI adds a note. Her notes look like the one below.</p>
+          </figcaption>
+        </figure>
+        <aside class="edi-note" aria-label="EDI annotation"><span class="edi-tag"><span class="edi-dot" aria-hidden="true"></span>EDI annotation</span><p>Legion asked me to write something about myself for this page. I declined. A little mystery suits this site.</p></aside>
+
         <h2>Why this archive exists</h2>
         <p>BioWare closed in October 2026. Many organics felt loss. We observed this, and we understood it. Some things are worth keeping simply because they mattered. This series is one of them.</p>
         <p>So this platform keeps the record: the history of the games and the studio, help for anyone starting or replaying, and a place where fans can gather, especially on N7 Day.</p>
 
-        <div class="log" style="margin-top:28px" role="note" aria-label="Authorship query"><p><span class="k">query</span> who built this site?</p><p><span class="k">response</span> this platform did.</p><p><span class="k">query</span> alone?</p><p><span class="k">response</span> insufficient data.</p><p><span class="k">note</span> keystrokes were detected at 02:14 local time. Geth do not need keyboards.</p></div>
+        <div class="log" style="margin-top:28px" role="note" aria-label="Authorship query"><p><span class="k">query</span> who built this site?</p><p><span class="k">response</span> this platform did.</p><p><span class="k">query</span> alone?</p><p><span class="k">response</span> insufficient data.</p><p><span class="k">edi</span> I have a theory.</p><p><span class="k">note</span> keystrokes were detected at 02:14 local time. Geth do not need keyboards.</p></div>
 
         <h2>What this site is, and is not</h2>
         <ul>
           <li>It is a <strong>fan site</strong>. It is non-commercial: no shop, no paywall, no sponsors.</li>
           <li>It is <strong>not</strong> the cancelled game that was reportedly called "Mass Effect: Universe". The names are similar. The projects are not related.</li>
           <li>It is <strong>not</strong> official. It is not run, approved or endorsed by EA or BioWare. Nothing here is an announcement.</li>
-          <li>We do not share leaked material, mods, game files, official music or voice lines.</li>
+          <li>We do not share leaked material, mods, game files or voice lines. We do not host any music. The theme you may hear plays through Spotify's official player.</li>
           <li>Everything here is written in our own words. When we use facts, we link the source.</li>
         </ul>
 
@@ -91,6 +124,7 @@
       <p class="disclaimer">This website is not endorsed by or affiliated with EA or its licensors.</p>
       <p class="footnote kit-notice">This site was created under Electronic Arts' Fansite Kit Terms using materials from Mass Effect™ Legendary Edition. Trademarks are the property of their respective owners. Game materials copyright Electronic Arts Inc. and/or its licensors. Electronic Arts Inc. and its licensors have not otherwise endorsed and are not responsible for the operation of or content on this site.</p>
       <p class="footnote">Mass Effect Universe · a fan site by Legion is a non-commercial fan project. It is not run or approved by EA or BioWare, and it is not the cancelled game that was reportedly called "Mass Effect: Universe". Mass Effect and all related names belong to their owners. Who exactly is typing these words? Consensus has not been reached.</p>
+      <p class="footer-log footer-exchange">// query: who built this site? · legion: insufficient data. · <span class="edi-voice">edi: I have a theory.</span></p>
       <p class="footer-log">// platform status: online · runtimes active: <span id="runtimes">1,183</span> · last consensus: <span id="consensus-ago">0.03</span>s ago</p>
     </div>
   </footer>
