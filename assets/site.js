@@ -30,41 +30,84 @@
   setInterval(render, 60000);
 })();
 
-// Starfield behind the page header: our own drawing, slow drift, a few twinkles.
+// Starfield behind the page header: our own drawing. Three depth layers drift at different speeds,
+// shift with scroll and the mouse (parallax), take the page's colour, and now and then a star falls.
+// Reduced motion: one still frame. Phones: fewer stars. Paused while the header is off screen.
 (function () {
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var canvases = document.querySelectorAll("canvas.stars");
-  canvases.forEach(function (c) {
+  var fine = window.matchMedia && window.matchMedia("(pointer: fine)").matches;
+  var LAYERS = [ { depth: 0.25, size: [0.35, 0.8], speed: 0.03, alpha: 0.55, share: 0.6 },
+                 { depth: 0.6,  size: [0.7, 1.3],  speed: 0.08, alpha: 0.8,  share: 0.3 },
+                 { depth: 1.0,  size: [1.2, 2.1],  speed: 0.16, alpha: 1.0,  share: 0.1 } ];
+  document.querySelectorAll("canvas.stars").forEach(function (c) {
     var ctx = c.getContext("2d"); if (!ctx) return;
-    var stars = [], w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var sky = c.closest(".sky") || c.parentNode;
+    var cs = getComputedStyle(sky);
+    var tint = (cs.getPropertyValue("--star-tint") || "").trim() || "#d9f6ff";
+    var warm = (cs.getPropertyValue("--star-warm") || "").trim() || "#ffd2b0";
+    var stars = [], w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    var px = 0, py = 0, tx = 0, ty = 0, sy = 0, visible = true, running = false, shoot = null, nextShoot = 0;
     function seed() {
       var r = c.getBoundingClientRect(); w = r.width; h = r.height;
       c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      var n = Math.round((w * h) / 2600); stars = [];
-      for (var i = 0; i < n; i++) {
-        var z = Math.random();
-        stars.push({ x: Math.random() * w, y: Math.random() * h, z: z,
-          r: z < 0.85 ? 0.4 + z * 0.7 : 1.1 + Math.random() * 0.9,
-          t: Math.random() * Math.PI * 2, warm: Math.random() < 0.08 });
-      }
+      var total = Math.round((w * h) / (w < 600 ? 3600 : 2200)); stars = [];
+      LAYERS.forEach(function (L, li) {
+        var n = Math.round(total * L.share);
+        for (var i = 0; i < n; i++) stars.push({ l: li, x: Math.random() * (w + 80) - 40, y: Math.random() * (h + 80) - 40,
+          r: L.size[0] + Math.random() * (L.size[1] - L.size[0]), t: Math.random() * 6.3, warm: Math.random() < 0.08 });
+      });
     }
     function draw(time) {
       ctx.clearRect(0, 0, w, h);
+      px += (tx - px) * 0.06; py += (ty - py) * 0.06;
       for (var i = 0; i < stars.length; i++) {
-        var s = stars[i];
-        if (!reduce) { s.x -= 0.02 + s.z * 0.08; if (s.x < -2) s.x = w + 2; }
-        var a = 0.35 + s.z * 0.55 + (reduce ? 0 : Math.sin(time / 900 + s.t) * 0.15 * s.z);
+        var s = stars[i], L = LAYERS[s.l];
+        if (!reduce) { s.x -= L.speed; if (s.x < -40) s.x = w + 40; }
+        var x = s.x + px * L.depth, y = s.y + (py + sy) * L.depth;
+        var a = L.alpha * (0.75 + (reduce ? 0 : Math.sin(time / 900 + s.t) * 0.25));
         ctx.globalAlpha = Math.max(0, Math.min(1, a));
-        ctx.fillStyle = s.warm ? "#ffd2b0" : "#d9f6ff";
-        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = s.warm ? warm : tint;
+        ctx.beginPath(); ctx.arc(x, y, s.r, 0, 6.2832); ctx.fill();
+        if (s.l === 2 && s.r > 1.7) { ctx.globalAlpha *= 0.25; ctx.beginPath(); ctx.arc(x, y, s.r * 3, 0, 6.2832); ctx.fill(); }
+      }
+      if (!reduce) {
+        if (!shoot && time > nextShoot) {
+          if (nextShoot) shoot = { x: Math.random() * w * 0.7 + w * 0.2, y: Math.random() * h * 0.4, vx: -(6 + Math.random() * 4), vy: 2.2 + Math.random() * 1.5, life: 0 };
+          nextShoot = time + 9000 + Math.random() * 14000;
+        }
+        if (shoot) {
+          shoot.x += shoot.vx; shoot.y += shoot.vy; shoot.life++;
+          var fade = Math.min(1, shoot.life / 6) * Math.max(0, 1 - shoot.life / 55);
+          var g = ctx.createLinearGradient(shoot.x, shoot.y, shoot.x - shoot.vx * 14, shoot.y - shoot.vy * 14);
+          g.addColorStop(0, tint); g.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.globalAlpha = fade; ctx.strokeStyle = g; ctx.lineWidth = 1.6; ctx.lineCap = "round";
+          ctx.beginPath(); ctx.moveTo(shoot.x, shoot.y); ctx.lineTo(shoot.x - shoot.vx * 14, shoot.y - shoot.vy * 14); ctx.stroke();
+          if (shoot.life > 55 || shoot.x < -100 || shoot.y > h + 100) shoot = null;
+        }
       }
       ctx.globalAlpha = 1;
-      if (!reduce) requestAnimationFrame(draw);
+      if (!reduce && visible) requestAnimationFrame(draw); else running = false;
     }
-    seed(); requestAnimationFrame(draw);
-    window.addEventListener("resize", function () { seed(); if (reduce) draw(0); });
+    function start() { if (!running) { running = true; requestAnimationFrame(draw); } }
+    seed(); start();
+    window.addEventListener("resize", function () { seed(); if (reduce) start(); });
+    if (reduce) return;
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { visible = e[0].isIntersecting; if (visible) start(); }).observe(sky);
+    window.addEventListener("scroll", function () { sy = -window.scrollY * 0.25; }, { passive: true });
+    if (fine) sky.addEventListener("pointermove", function (e) {
+      var r = sky.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width - 0.5) * -30;
+      ty = ((e.clientY - r.top) / r.height - 0.5) * -20;
+    });
   });
+  // The nebula glow drifts with scroll too, a little slower than the stars.
+  if (!reduce) {
+    var neb = document.querySelectorAll(".sky .nebula");
+    if (neb.length) window.addEventListener("scroll", function () {
+      var y = window.scrollY * 0.12; neb.forEach(function (n) { n.style.transform = "translate3d(0," + y + "px,0)"; });
+    }, { passive: true });
+  }
 })();
 
 // N7 ring: how far we are through the year between two N7 Days.
