@@ -347,3 +347,29 @@ try {
     document.addEventListener("keydown", arm, true);
   }
 })();
+
+// Phone menu: below 720px the links fold into a "Menu" button that opens a console-style panel.
+// Without JavaScript the links simply wrap, so nothing is ever unreachable.
+(function () {
+  var header = document.querySelector(".site-header"), nav = header && header.querySelector(".nav");
+  if (!nav) return;
+  document.documentElement.classList.add("js");
+  nav.id = nav.id || "site-nav";
+  var links = nav.querySelectorAll("a");
+  links.forEach(function (a, i) { a.setAttribute("data-n", (i + 1 < 10 ? "0" : "") + (i + 1)); });
+  var btn = document.createElement("button");
+  btn.type = "button"; btn.className = "menu-btn";
+  btn.setAttribute("aria-controls", nav.id); btn.setAttribute("aria-expanded", "false");
+  btn.innerHTML = '<span class="menu-icon" aria-hidden="true"><i></i><i></i><i></i></span><span class="menu-label">Menu</span>';
+  nav.parentNode.insertBefore(btn, nav);
+  function set(open) {
+    header.classList.toggle("menu-open", open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    btn.querySelector(".menu-label").textContent = open ? "Close" : "Menu";
+  }
+  btn.addEventListener("click", function (e) { e.stopPropagation(); set(!header.classList.contains("menu-open")); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && header.classList.contains("menu-open")) { set(false); btn.focus(); } });
+  document.addEventListener("click", function (e) { if (header.classList.contains("menu-open") && !header.contains(e.target)) set(false); });
+  links.forEach(function (a) { a.addEventListener("click", function () { set(false); }); });
+  window.addEventListener("resize", function () { if (window.innerWidth > 720) set(false); });
+})();
