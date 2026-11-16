@@ -633,3 +633,47 @@ details.spoiler p { margin-top: 6px; }
   .edi-holo { width: 150px; }
   .edi-banner.has-photo .edi-holo { width: 130px; }
 }
+
+/* Starfield upgrade: a colour per page, a drifting nebula layer, star tints read by site.js */
+.sky { --star-tint: #d9f6ff; --star-warm: #ffd2b0; }
+.sky .nebula { position: absolute; inset: -20% -10%; z-index: -2; pointer-events: none; will-change: transform; }
+.sky .nebula::before { content: ""; position: absolute; inset: 0; opacity: 0.9;
+  background: var(--nebula); animation: nebula-drift 60s ease-in-out infinite alternate; }
+@keyframes nebula-drift { from { transform: translate3d(-2%, 0, 0) scale(1); } to { transform: translate3d(2%, -2%, 0) scale(1.06); } }
+@media (prefers-reduced-motion: reduce) { .sky .nebula::before { animation: none; } }
+
+.sky--blue { --star-tint: #dce8ff;
+  --nebula: radial-gradient(ellipse 35% 45% at 75% 35%, rgba(59,91,255,0.20), transparent 70%),
+            radial-gradient(ellipse 25% 35% at 20% 80%, rgba(111,224,242,0.10), transparent 70%); }
+.sky--citadel { --star-tint: #ece0ff; --star-warm: #ffc7e6;
+  background: linear-gradient(180deg, #07050f 0%, #160f2a 100%);
+  --nebula: radial-gradient(ellipse 40% 55% at 80% 30%, rgba(150,95,255,0.26), transparent 70%),
+            radial-gradient(ellipse 30% 40% at 15% 90%, rgba(255,120,200,0.12), transparent 70%),
+            radial-gradient(ellipse 50% 20% at 55% 15%, rgba(120,170,255,0.10), transparent 70%); }
+.sky--andromeda { --star-tint: #dcffef; --star-warm: #fff2b8;
+  background: linear-gradient(180deg, #030a09 0%, #0a1d1a 100%);
+  --nebula: radial-gradient(ellipse 45% 50% at 78% 35%, rgba(60,220,160,0.20), transparent 70%),
+            radial-gradient(ellipse 30% 35% at 12% 85%, rgba(90,190,255,0.12), transparent 70%),
+            radial-gradient(ellipse 22% 28% at 92% 80%, rgba(220,240,120,0.08), transparent 70%); }
+.sky--reaper { --star-tint: #ffe6dc; --star-warm: #ffb08a;
+  background: linear-gradient(180deg, #0b0505 0%, #1f0c09 100%);
+  --nebula: radial-gradient(ellipse 45% 55% at 82% 30%, rgba(255,80,40,0.24), transparent 70%),
+            radial-gradient(ellipse 35% 30% at 10% 95%, rgba(255,150,60,0.12), transparent 70%),
+            radial-gradient(ellipse 18% 22% at 70% 75%, rgba(180,30,30,0.16), transparent 70%); }
+.sky--geth { --nebula: radial-gradient(ellipse 40% 55% at 85% 25%, rgba(111,224,242,0.16), transparent 70%),
+            radial-gradient(ellipse 30% 40% at 10% 95%, rgba(255,179,138,0.08), transparent 70%); }
+.sky--lost { --star-tint: #b9c4cf; background: linear-gradient(180deg, #050608 0%, #0e1116 100%);
+  --nebula: radial-gradient(ellipse 30% 40% at 80% 40%, rgba(255,70,70,0.10), transparent 70%); }
+
+/* Reserved image spots: each figure removes itself when its file is missing */
+.moment-shot { margin: 10px 0 0; max-width: 320px; }
+.moment-shot img, .wide-shot img, .eye-shot img { display: block; width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--line); }
+.moment-shot img { aspect-ratio: 16 / 9; object-fit: cover; }
+.wide-shot { margin: 20px 0 24px; max-width: var(--measure); }
+.wide-shot img { aspect-ratio: 16 / 9; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+.log-pair { margin-top: 28px; display: grid; gap: 16px; }
+.log-pair .log { margin: 0; }
+.log-pair:has(.eye-shot) { grid-template-columns: minmax(0, 1fr) 200px; align-items: stretch; }
+.eye-shot { margin: 0; }
+.eye-shot img { height: 100%; object-fit: cover; background: #000; }
+@media (max-width: 560px) { .log-pair:has(.eye-shot) { grid-template-columns: 1fr; } .eye-shot img { aspect-ratio: 16 / 9; } }
