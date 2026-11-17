@@ -373,3 +373,23 @@ try {
   links.forEach(function (a) { a.addEventListener("click", function () { set(false); }); });
   window.addEventListener("resize", function () { if (window.innerWidth > 720) set(false); });
 })();
+
+// Easter egg: once in a while a rogue AI "hacks" the archive and Legion and EDI restore it (assets/rogue.js).
+// About 1 in 30 page views, never more than once a day per visitor, never on the error page, only after
+// the visitor has been reading for a little while. Add ?rogue=1 to any address to see it right away.
+(function () {
+  var me = document.currentScript, base = me ? me.src.replace(/site\.js(\?.*)?$/, "") : "assets/";
+  var force = /[?&]rogue=1\b/.test(location.search);
+  var KEY = "meu-rogue-day", today = new Date().toISOString().slice(0, 10), last = null;
+  try { last = localStorage.getItem(KEY); } catch (e) {}
+  if (!force) {
+    if (document.title.indexOf("Signal lost") !== -1 || /404/.test(location.pathname)) return;
+    if (last === today || Math.random() >= 1 / 30) return;
+  }
+  function go() {
+    if (document.hidden) { document.addEventListener("visibilitychange", function v() { if (!document.hidden) { document.removeEventListener("visibilitychange", v); go(); } }); return; }
+    try { localStorage.setItem(KEY, today); } catch (e) {}
+    var s = document.createElement("script"); s.src = base + "rogue.js"; s.async = true; document.head.appendChild(s);
+  }
+  setTimeout(go, force ? 1200 : 9000 + Math.random() * 12000);
+})();
