@@ -374,7 +374,7 @@ try {
   window.addEventListener("resize", function () { if (window.innerWidth > 720) set(false); });
 })();
 
-// Easter egg: once in a while a rogue AI "hacks" the archive and Legion and EDI restore it (assets/rogue.js).
+// Easter egg: once in a while a rogue AI "hacks" the archive and Legion and EDI restore it (assets/rogue.js, about 75 s, skippable).
 // About 1 in 30 page views, never more than once a day per visitor, never on the error page, only after
 // the visitor has been reading for a little while. Add ?rogue=1 to any address to see it right away.
 (function () {
