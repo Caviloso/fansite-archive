@@ -3,19 +3,22 @@
    where the (fictional) geth caretaker leaves its notes. Kevin's words are in the serif. */
 
 :root {
-  color-scheme: light dark; /* we handle dark mode ourselves, so browsers (e.g. Samsung Internet) must not repaint the page */
-  --bg: #f3f5f7;
-  --surface: #ffffff;
-  --fg: #16202b;
-  --muted: #5a6876;
-  --line: #d6dde4;
-  --accent: #0b6f86;      /* cool cyan-teal: the caretaker's light */
-  --accent-soft: #e2f1f4;
-  --warm: #b4532a;        /* the human fan's colour, used sparingly */
-  --log-bg: #0f1a24;
-  --log-fg: #9fe3f0;
-  --edi: #3352c4;        /* EDI's blue: a guest voice, distinct from Legion's cyan */
-  --edi-soft: #e8eeff;
+  /* Always dark, on every device. "only dark" tells phones, PCs and browsers with a forced or
+     automatic dark mode (Samsung Internet, Chrome, Edge, Opera) that the page is already dark,
+     so they leave our colours and Legion's glow alone. There is no light version any more. */
+  color-scheme: only dark;
+  --bg: #0b1219;
+  --surface: #111b25;
+  --fg: #e4ebf1;
+  --muted: #94a5b5;
+  --line: #223241;
+  --accent: #5fd0e6;      /* cool cyan: the caretaker's light */
+  --accent-soft: #12303a;
+  --warm: #f0915f;        /* the human fan's colour, used sparingly */
+  --log-bg: #060c12;
+  --log-fg: #8fdcec;
+  --edi: #9db8ff;         /* EDI's blue: a guest voice, distinct from Legion's cyan */
+  --edi-soft: #151f3d;
 
   --font-display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
   --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
@@ -32,38 +35,7 @@
   --wide: 64rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0b1219;
-    --surface: #111b25;
-    --fg: #e4ebf1;
-    --muted: #94a5b5;
-    --line: #223241;
-    --accent: #5fd0e6;
-    --accent-soft: #12303a;
-    --warm: #f0915f;
-    --log-bg: #060c12;
-    --log-fg: #8fdcec;
-  --edi: #9db8ff;
-  --edi-soft: #151f3d;
-    --edi: #9db8ff;
-    --edi-soft: #151f3d;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0b1219;
-  --surface: #111b25;
-  --fg: #e4ebf1;
-  --muted: #94a5b5;
-  --line: #223241;
-  --accent: #5fd0e6;
-  --accent-soft: #12303a;
-  --warm: #f0915f;
-  --log-bg: #060c12;
-  --log-fg: #8fdcec;
-  color-scheme: dark;
-}
+html { background: #0b1219; }
 
 *, *::before, *::after { box-sizing: border-box; }
 
